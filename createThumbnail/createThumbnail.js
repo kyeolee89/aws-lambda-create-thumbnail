@@ -56,13 +56,14 @@ exports.handler = function(event, context) {
 	console.log('contentType : ' + contentType);
 	console.log('-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
 
-	/* email 파일 썸네일의 경우 400사이즈만 생성 */
-	if(srcBucket.indexOf('email') > -1) {
+	/* 특정 파일 썸네일의 경우 400사이즈만 생성 */
+	if(srcBucket.indexOf('test') > -1) {
 		resizeType = ['400'];
 	}
 
 	async.forEachOfLimit(resizeType, 1, function(size, index, cb) {
 
+		/* filename에 thumbnail size 포함 */
 		dstKey = dstKeyPrefix + fileName + '_' + resizeType[index];
 		var resizeRatio = resizeType[index];
 
@@ -121,7 +122,7 @@ exports.handler = function(event, context) {
 
 				var d = new Date();
 				var req = https.request({
-					path: '/api/chat.postMessage?token=xoxp-2151773333-11273842848-30476966578-de4d1cfaed&channel=%23image_resize_fail&text='+errorMsg+'-H'+d.getHours()+'/M'+d.getMinutes()+'/S'+d.getSeconds()+'&pretty=1',
+					path: '/api/chat.postMessage?token=token&channel=channel&text='+errorMsg+'-H'+d.getHours()+'/M'+d.getMinutes()+'/S'+d.getSeconds()+'&pretty=1',
 					method: 'GET',
 					host: 'slack.com'
 				}, function(res) {
